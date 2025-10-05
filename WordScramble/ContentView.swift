@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var showingError = false
     
     var body: some View {
+        
         NavigationStack{
             
             
@@ -37,13 +38,15 @@ struct ContentView: View {
                             Image(systemName: "\(word.count).circle")
                             Text(word)
                             
+                            
+                            
                         }
-                       
                     }
+                    
                 }
-                
-             }
-           
+            }
+            
+            
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
@@ -53,18 +56,21 @@ struct ContentView: View {
                 Text(errorMessage)
             }
             .toolbar {
+                
                 ToolbarItem(placement: .navigationBarLeading) {
-                        Text("Score: \(score)")
+                    Text("Score: \(score)")
                         .font(.body)
                         .frame(minWidth: 80, alignment: .leading)
-                    }
-
-                    // Trailing item: New Game button
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("New Game", action: startGame)
-                    }
+                }
+                
+                // Trailing item: New Game button
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("New Game", action: startGame)
+                    
+                }
             }
         }
+    
     }
     
     func addNewWord(){
@@ -153,4 +159,4 @@ struct ContentView: View {
 
 
 
-//test for commit and push 5
+//need to fix stacks rootword going in toolbar
