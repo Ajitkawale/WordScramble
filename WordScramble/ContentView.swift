@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var addedWord = [String]()
     @State private var rootWord = ""
     @State private var newWord = ""
+    @State private var score: Int = 0
     
     @State private var errorTitle = ""
     @State private var errorMessage = ""
@@ -18,6 +19,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack{
+            
             
             List{
                 Section
@@ -34,10 +36,14 @@ struct ContentView: View {
                         HStack {
                             Image(systemName: "\(word.count).circle")
                             Text(word)
+                            
                         }
+                       
                     }
                 }
+                
              }
+           
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
@@ -46,7 +52,18 @@ struct ContentView: View {
                 
                 Text(errorMessage)
             }
-            
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                        Text("Score: \(score)")
+                        .font(.body)
+                        .frame(minWidth: 80, alignment: .leading)
+                    }
+
+                    // Trailing item: New Game button
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("New Game", action: startGame)
+                    }
+            }
         }
     }
     
@@ -70,11 +87,12 @@ struct ContentView: View {
             wordError(title: "Word not Recognized", message: "You can't just make then up, you know !")
             return
         }
-       
-       
+        
+        
         
         withAnimation {
             addedWord.insert(answer, at: 0)
+            score += 1
         }
         newWord = ""
     }
@@ -83,6 +101,10 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsURL) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                
+                addedWord.removeAll()   // 🧹 Clear old words
+                newWord = ""
+                score = 0// 🔄 Clear text field
                 return
             }
         }
@@ -112,7 +134,9 @@ struct ContentView: View {
     }
     func isValid(word: String) -> Bool {
         !word.contains(rootWord)
+        
     }
+   
    
     
     func wordError(title: String, message: String){
